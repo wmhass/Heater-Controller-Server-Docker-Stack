@@ -5,3 +5,6 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./services/heater_control_app/:/usr/src/services/heater_control_app/
+    env_file: ./environments/dev
+  db:
+    env_file: ./environments/dev.db

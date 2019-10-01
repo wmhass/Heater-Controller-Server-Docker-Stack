@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  web:
+    command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
+    env_file: ./environments/prod
+  db:
+    env_file: ./environments/prod.db
