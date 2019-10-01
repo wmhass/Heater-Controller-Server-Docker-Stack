@@ -1,0 +1,3 @@
+[submodule "heater_control_app"]
+	path = heater_control_app
+	url = ./heater_control_app
