@@ -2,10 +2,7 @@ version: '3.7'
 
 services:
   web:
-    build: ./heater_control_app
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./heater_control_app/:/usr/src/heater_control_app/
+    build: ./services/heater_control_app
     ports:
       - 8000:8000
     environment:
