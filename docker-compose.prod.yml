@@ -2,18 +2,32 @@ version: '3.7'
 
 services:
   web:
-    command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
     build:
       context: ./services/heater_control_app
       dockerfile: Dockerfile.prod
+    command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
     env_file: ./environments/prod
     expose:
       - 8000
+    depends_on:
+      - db
   db:
+    image: postgres:11.5-alpine
+    ports:
+      - 5430:5432
     env_file: ./environments/prod.db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
   nginx:
     build: ./services/nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
     ports:
       - 1337:80
     depends_on:
       - web
+volumes:
+  postgres_data:
+  static_volume:

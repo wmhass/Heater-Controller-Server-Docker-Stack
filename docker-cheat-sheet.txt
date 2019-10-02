@@ -1,14 +1,22 @@
-docker-compose up -d --build
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
-# Down
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
-
+# Docker
 docker system prune -a
 
-docker-compose -f docker-compose.prod.yml down -v
-docker-compose -f docker-compose.prod.yml up -d --build
-docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 
-# docker build --file Dockerfile.prod --tag heater_control:latest
-docker build ./ --file Dockerfile.prod --tag heater_control:latest
+# Helpers
+docker-compose logs -f
+
+
+# Development
+
+docker-compose up -d --build
+docker-compose exec web python manage.py migrate --noinput
+docker build services/heater_control_app --file services/heater_control_app/Dockerfile --tag heater_control:dev_stable
+
+
+# Production
+
+docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml down -v
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker build services/heater_control_app --file services/heater_control_app/Dockerfile.prod --tag heater_control:master_stable
