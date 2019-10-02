@@ -8,6 +8,7 @@ services:
     command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/usr/src/services/heater_control_app/staticfiles
+      - media_volume:/usr/src/services/heater_control_app/mediafiles
     env_file: ./environments/prod
     expose:
       - 8000
@@ -24,6 +25,7 @@ services:
     build: ./services/nginx
     volumes:
       - static_volume:/usr/src/services/heater_control_app/staticfiles
+      - media_volume:/usr/src/services/heater_control_app/mediafiles
     ports:
       - 1337:80
     depends_on:
@@ -31,3 +33,4 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
