@@ -4,3 +4,6 @@
 [submodule "services/nginx"]
 	path = services/nginx
 	url = ./services/nginx
+[submodule "services/mosquitto"]
+	path = services/mosquitto
+	url = ./services/mosquitto/
