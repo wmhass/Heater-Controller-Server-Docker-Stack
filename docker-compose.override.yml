@@ -9,5 +9,7 @@ services:
     volumes:
       - ./services/heater_control_app/:/usr/src/services/heater_control_app/
     env_file: ./environments/dev
+    ports:
+      - 8000:8000
   db:
     env_file: ./environments/dev.db
