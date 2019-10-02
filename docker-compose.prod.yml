@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_volume:/usr/src/app/staticfiles
+      - static_volume:/usr/src/services/heater_control_app/staticfiles
     env_file: ./environments/prod
     expose:
       - 8000
@@ -23,7 +23,7 @@ services:
   nginx:
     build: ./services/nginx
     volumes:
-      - static_volume:/usr/src/app/staticfiles
+      - static_volume:/usr/src/services/heater_control_app/staticfiles
     ports:
       - 1337:80
     depends_on:

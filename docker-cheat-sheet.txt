@@ -18,5 +18,8 @@ docker build services/heater_control_app --file services/heater_control_app/Dock
 docker-compose -f docker-compose.prod.yml up -d --build
 docker-compose -f docker-compose.prod.yml up -d
 docker-compose -f docker-compose.prod.yml down -v
-docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 docker build services/heater_control_app --file services/heater_control_app/Dockerfile.prod --tag heater_control:master_stable
+
+# TODO: This has to be removed in the future: The CI/CD script should be responsible for executing it by using `docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput`
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
