@@ -1,9 +1,15 @@
 # Docker
 docker system prune -a
-
+docker volume ls
 
 # Helpers
 docker-compose logs -f
+
+
+# Volumes
+screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+  # Example: /var/lib/docker/volumes/heater-controller-server-services_mosquitto_data/_data
+  # Exit: ctrl a + ctrl d -> Then `screen -ls`
 
 
 # Development

@@ -20,5 +20,16 @@ services:
     env_file: ./environments/dev.db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+  mqttbroker:
+    image: eclipse-mosquitto:1.6.7
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./services/mosquitto/config/:/mosquitto/config/
+      - mosquitto_data:/mosquitto/data/
+      - mosquitto_log:/mosquitto/log/
 volumes:
   postgres_data:
+  mosquitto_data:
+  mosquitto_log:
