@@ -3,6 +3,9 @@ version: '3.7'
 services:
   web:
     command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
+    build:
+      context: ./services/heater_control_app
+      dockerfile: Dockerfile.prod
     env_file: ./environments/prod
   db:
     env_file: ./environments/prod.db

@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   web:
-    build: ./services/heater_control_app
     ports:
       - 8000:8000
     depends_on:
