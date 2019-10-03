@@ -37,6 +37,11 @@ services:
     volumes:
       - mosquitto_data:/mosquitto/data/
       - mosquitto_log:/mosquitto/log/
+  mqttclientobserver:
+    build: ./services/mqtt_client_observer
+    network_mode: host
+    depends_on:
+      - mqttbroker
 volumes:
   postgres_data_prod:
   static_volume:

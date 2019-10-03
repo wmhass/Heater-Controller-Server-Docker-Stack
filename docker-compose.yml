@@ -34,8 +34,6 @@ services:
   mqttclientobserver:
     build: ./services/mqtt_client_observer
     network_mode: host
-    volumes:
-      - ./services/mqtt_client_observer/files/:/usr/src/files/
     depends_on:
       - mqttbroker
 volumes:
