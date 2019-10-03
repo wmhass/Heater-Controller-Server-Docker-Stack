@@ -4,10 +4,10 @@ services:
   web:
     command: python manage.py runserver 0.0.0.0:8000
     build:
-      context: ./services/heater_control_app
+      context: ../services_repos/heater_control_app
       dockerfile: Dockerfile
     volumes:
-      - ./services/heater_control_app/:/usr/src/services/heater_control_app/
+      - ./services_repos/heater_control_app/:/usr/src/services/heater_control_app/
     env_file: ./environments/dev
     ports:
       - 8000:8000
@@ -25,8 +25,6 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-    expose:
-      - 1883
     volumes:
       - ./services/mosquitto/config/:/mosquitto/config/
       - ./services/mosquitto/data/:/mosquitto/data/

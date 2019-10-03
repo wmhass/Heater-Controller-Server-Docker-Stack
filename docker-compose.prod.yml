@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build:
-      context: ./services/heater_control_app
+      context: ../services_repos/heater_control_app
       dockerfile: Dockerfile.prod
     volumes:
       - static_volume:/usr/src/heater_control_app/staticfiles

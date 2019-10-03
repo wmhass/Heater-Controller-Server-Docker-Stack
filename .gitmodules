@@ -1,6 +1,3 @@
-[submodule "services/heater_control_app"]
-	path = services/heater_control_app
-	url = ./services/heater_control_app
 [submodule "services/nginx"]
 	path = services/nginx
 	url = ./services/nginx
