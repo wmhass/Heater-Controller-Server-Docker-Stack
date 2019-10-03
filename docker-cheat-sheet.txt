@@ -1,3 +1,6 @@
+# Git clone
+git clone --recurse-submodules /Users/william/Developer/infra-poc/vm/Heater-Controller-Env-Virtual-Machine
+
 # Override docker-compose
 https://medium.com/softonic-eng/docker-compose-from-development-to-production-88000124a57c
 
