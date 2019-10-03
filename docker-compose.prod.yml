@@ -39,7 +39,6 @@ services:
       - mosquitto_log:/mosquitto/log/
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
-    network_mode: host
     depends_on:
       - mqttbroker
     environment:
