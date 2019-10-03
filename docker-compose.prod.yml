@@ -21,7 +21,7 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
   nginx:
-    build: ./services/nginx
+    build: ../services_repos/nginx
     volumes:
       - static_volume:/usr/src/heater_control_app/staticfiles
       - media_volume:/usr/src/heater_control_app/mediafiles

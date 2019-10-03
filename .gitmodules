@@ -1,6 +1,3 @@
-[submodule "services/nginx"]
-	path = services/nginx
-	url = ./services/nginx
 [submodule "services/mqtt_client_observer"]
 	path = services/mqtt_client_observer
 	url = ./services/mqtt_client_observer
