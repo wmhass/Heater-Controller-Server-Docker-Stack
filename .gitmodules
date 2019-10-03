@@ -7,3 +7,6 @@
 [submodule "services/mosquitto"]
 	path = services/mosquitto
 	url = ./services/mosquitto
+[submodule "services/mqtt_client_observer"]
+	path = services/mqtt_client_observer
+	url = ./services/mqtt_client_observer
