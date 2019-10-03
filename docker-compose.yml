@@ -27,9 +27,7 @@ services:
       - 9001:9001
     volumes:
       - ./services/mosquitto/config/:/mosquitto/config/
-      - mosquitto_data:/mosquitto/data/
-      - mosquitto_log:/mosquitto/log/
+      - ./services/mosquitto/data/:/mosquitto/data/
+      - ./services/mosquitto/log/:/mosquitto/log/
 volumes:
   postgres_data:
-  mosquitto_data:
-  mosquitto_log:

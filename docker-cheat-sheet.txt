@@ -7,7 +7,7 @@ docker-compose logs -f
 
 
 # Volumes
-screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
   # Example: /var/lib/docker/volumes/heater-controller-server-services_mosquitto_data/_data
   # Exit: ctrl a + ctrl d -> Then `screen -ls`
 
@@ -29,3 +29,8 @@ docker build services/heater_control_app --file services/heater_control_app/Dock
 # TODO: This has to be removed in the future: The CI/CD script should be responsible for executing it by using `docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput`
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+
+
+# MQTT Broker
+docker-compose exec mqttbroker kill -SIGHUP 1
+  -> This command will have the mosquitto mqtt broker to reload the configuration file
