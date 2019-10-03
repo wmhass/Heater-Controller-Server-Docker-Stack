@@ -6,8 +6,8 @@ services:
       context: ./services/heater_control_app
       dockerfile: Dockerfile.prod
     volumes:
-      - static_volume:/usr/src/services/heater_control_app/staticfiles
-      - media_volume:/usr/src/services/heater_control_app/mediafiles
+      - static_volume:/usr/src/heater_control_app/staticfiles
+      - media_volume:/usr/src/heater_control_app/mediafiles
     env_file: ./environments/prod
     expose:
       - 8000
@@ -23,8 +23,8 @@ services:
   nginx:
     build: ./services/nginx
     volumes:
-      - static_volume:/usr/src/services/heater_control_app/staticfiles
-      - media_volume:/usr/src/services/heater_control_app/mediafiles
+      - static_volume:/usr/src/heater_control_app/staticfiles
+      - media_volume:/usr/src/heater_control_app/mediafiles
     ports:
       - 1337:80
     depends_on:
