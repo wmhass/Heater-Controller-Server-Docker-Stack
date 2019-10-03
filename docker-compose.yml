@@ -21,14 +21,14 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data/
   mqttbroker:
-    build: ./services/mosquitto
+    build: ../services_repos/mosquitto
     ports:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ./services/mosquitto/config/:/mosquitto/config/
-      - ./services/mosquitto/data/:/mosquitto/data/
-      - ./services/mosquitto/log/:/mosquitto/log/
+      - ../services_repos/mosquitto/config/:/mosquitto/config/
+      - ../services_repos/mosquitto/data/:/mosquitto/data/
+      - ../services_repos/mosquitto/log/:/mosquitto/log/
   mqttclientobserver:
     build: ./services/mqtt_client_observer
     network_mode: host
