@@ -5,7 +5,6 @@ services:
     build:
       context: ./services/heater_control_app
       dockerfile: Dockerfile.prod
-    command: gunicorn heater_control.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/usr/src/services/heater_control_app/staticfiles
       - media_volume:/usr/src/services/heater_control_app/mediafiles
@@ -20,7 +19,7 @@ services:
       - 5430:5432
     env_file: ./environments/prod.db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data_prod:/var/lib/postgresql/data/
   nginx:
     build: ./services/nginx
     volumes:
@@ -39,7 +38,7 @@ services:
       - mosquitto_data:/mosquitto/data/
       - mosquitto_log:/mosquitto/log/
 volumes:
-  postgres_data:
+  postgres_data_prod:
   static_volume:
   media_volume:
   mosquitto_data:

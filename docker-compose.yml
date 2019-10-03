@@ -19,15 +19,24 @@ services:
       - 5430:5432
     env_file: ./environments/dev.db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data_dev:/var/lib/postgresql/data/
   mqttbroker:
     build: ./services/mosquitto
     ports:
       - 1883:1883
       - 9001:9001
+    expose:
+      - 1883
     volumes:
       - ./services/mosquitto/config/:/mosquitto/config/
       - ./services/mosquitto/data/:/mosquitto/data/
       - ./services/mosquitto/log/:/mosquitto/log/
+  mqttclientobserver:
+    build: ./services/mqtt_client_observer
+    network_mode: host
+    volumes:
+      - ./services/mqtt_client_observer/files/:/usr/src/files/
+    depends_on:
+      - mqttbroker
 volumes:
-  postgres_data:
+  postgres_data_dev:

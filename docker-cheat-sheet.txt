@@ -1,6 +1,7 @@
 # Docker
 docker system prune -a
 docker volume ls
+docker logs [container name] (https://medium.com/@pimterry/5-ways-to-debug-an-exploding-docker-container-4f729e2c0aa8)
 
 # Helpers
 docker-compose logs -f
