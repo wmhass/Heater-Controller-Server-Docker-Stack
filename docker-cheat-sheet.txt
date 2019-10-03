@@ -1,3 +1,6 @@
+# Override docker-compose
+https://medium.com/softonic-eng/docker-compose-from-development-to-production-88000124a57c
+
 # Docker
 docker system prune -a
 docker volume prune
