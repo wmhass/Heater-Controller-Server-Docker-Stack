@@ -21,7 +21,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   mqttbroker:
-    image: eclipse-mosquitto:1.6.7
+    build: ./services/mosquitto
     ports:
       - 1883:1883
       - 9001:9001
