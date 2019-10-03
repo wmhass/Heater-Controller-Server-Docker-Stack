@@ -1,6 +1,9 @@
 # Override docker-compose
 https://medium.com/softonic-eng/docker-compose-from-development-to-production-88000124a57c
 
+# Docker stack deploy
+docker stack deploy -c docker-compose.yml stacktest
+
 # Docker
 docker system prune -a
 docker volume prune
