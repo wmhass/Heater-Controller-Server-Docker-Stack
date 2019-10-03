@@ -6,4 +6,4 @@
 	url = ./services/nginx
 [submodule "services/mosquitto"]
 	path = services/mosquitto
-	url = ./services/mosquitto/
+	url = ./services/mosquitto
