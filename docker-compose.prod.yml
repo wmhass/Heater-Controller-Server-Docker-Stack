@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.prod
     volumes:
       - static_volume:/usr/src/heater_control_app/staticfiles
-      - media_volume:/usr/src/heater_control_app/mediafiles
+      - media_volume:/usr/mediafiles
     env_file: ./environments/prod
     expose:
       - 8000

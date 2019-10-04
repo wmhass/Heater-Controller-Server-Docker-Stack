@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../services_repos/heater_control_app/:/usr/src/services/heater_control_app/
+      - ../mediafiles:/usr/mediafiles
     env_file: ./environments/dev
     ports:
       - 8000:8000
