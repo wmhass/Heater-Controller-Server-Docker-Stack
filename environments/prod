@@ -1,9 +1,9 @@
 DEBUG=0
-SECRET_KEY=change_me
+SECRET_KEY=wqx1e!)_pj=n&j1%((otz!ks79t2dt+bichvhzx)e0jgl-jvhf
 SQL_ENGINE=django.db.backends.postgresql
-SQL_DATABASE=hello_django_prod
-SQL_USER=hello_django
-SQL_PASSWORD=hello_django
+SQL_DATABASE=heater_control_prod
+SQL_USER=postgres
+SQL_PASSWORD=h\4y1!6:l25#d_W
 SQL_HOST=db
 SQL_PORT=5432
 DATABASE=postgres
