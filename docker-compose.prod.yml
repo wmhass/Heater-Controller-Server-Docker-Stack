@@ -39,12 +39,10 @@ services:
     build: ../services_repos/mqtt_client_observer
     depends_on:
       - mqttbroker
-    environment:
-      - MQTT_BROKER_ADDR=mqttbroker
+    env_file: ./environments/prod
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
-    environment:
-      - MQTT_BROKER_ADDR=mqttbroker
+    env_file: ./environments/prod
     depends_on:
       - mqttbroker
 volumes:

@@ -33,16 +33,14 @@ services:
     build: ../services_repos/mqtt_client_observer
     volumes:
       - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
-    environment:
-      - MQTT_BROKER_ADDR=mqttbroker
+    env_file: ./environments/dev
     depends_on:
       - mqttbroker
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
     ports:
       - 8888:8888
-    environment:
-      - MQTT_BROKER_ADDR=mqttbroker
+    env_file: ./environments/dev
     depends_on:
       - mqttbroker
 volumes:

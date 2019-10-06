@@ -8,3 +8,4 @@ SQL_HOST=db
 SQL_PORT=5432
 DATABASE=postgres
 MEDIA_FILES_PATH=/usr/mediafiles/
+MQTT_BROKER_ADDR=mqttbroker
