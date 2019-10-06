@@ -9,8 +9,6 @@ services:
       - static_volume:/usr/src/heater_control_app/staticfiles
       - media_volume:/usr/mediafiles
     env_file: ./environments/prod
-    expose:
-      - 8000
     depends_on:
       - db
   db:
@@ -45,8 +43,6 @@ services:
       - MQTT_BROKER_ADDR=mqttbroker
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
-    expose:
-      - 8888
     environment:
       - MQTT_BROKER_ADDR=mqttbroker
     depends_on:

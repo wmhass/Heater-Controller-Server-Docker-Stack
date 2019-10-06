@@ -40,8 +40,6 @@ services:
       - mqttbroker
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
-    expose:
-      - 8888
     ports:
       - 8888:8888
     environment:
