@@ -6,4 +6,4 @@ SQL_USER=postgres
 SQL_PASSWORD=postgres
 SQL_HOST=db
 SQL_PORT=5432
-MEDIA_FILES_PATH=/usr/mediafiles
+MEDIA_FILES_PATH=/usr/mediafiles/
