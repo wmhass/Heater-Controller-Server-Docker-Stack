@@ -6,7 +6,7 @@ services:
       context: ../services_repos/heater_control_app
       dockerfile: Dockerfile
     volumes:
-      - ../services_repos/heater_control_app/:/usr/src/services/heater_control_app/
+      - ../services_repos/heater_control_app/:/usr/src/heater_control_app/
       - ../mediafiles:/usr/mediafiles
     env_file: ./environments/dev
     ports:
@@ -25,10 +25,14 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
+    env_file: ./environments/dev
     volumes:
-      - ../services_repos/mosquitto/config/:/mosquitto/config/
-      - ../services_repos/mosquitto/data/:/mosquitto/data/
-      - ../services_repos/mosquitto/log/:/mosquitto/log/
+      - ../services_repos/mosquitto/config/:/etc/mosquitto/config
+      - ../services_repos/mosquitto/data/:/etc/mosquitto/data
+      - ../services_repos/mosquitto/log/:/etc/mosquitto/log
+    depends_on:
+      - db
+      - web
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     volumes:

@@ -32,9 +32,13 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
+    env_file: ./environments/prod
     volumes:
-      - mosquitto_data:/mosquitto/data/
-      - mosquitto_log:/mosquitto/log/
+      - mosquitto_data:/etc/mosquitto/data
+      - mosquitto_log:/etc/mosquitto/log
+    depends_on:
+      - db
+      - web
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     depends_on:

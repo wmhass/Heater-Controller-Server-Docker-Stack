@@ -29,7 +29,9 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 # Development
 
 docker-compose up -d --build
+docker-compose exec web python manage.py makemigrations historical_data --noinput
 docker-compose exec web python manage.py migrate --noinput
+docker-compose exec web python manage.py migrate --fake mqttauthorization zero
 docker build services/heater_control_app --file services/heater_control_app/Dockerfile --tag heater_control:dev_stable
 
 
