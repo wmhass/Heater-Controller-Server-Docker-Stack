@@ -6,36 +6,42 @@ services:
       context: ../services_repos/heater_control_app
       dockerfile: Dockerfile.prod
     volumes:
-      - static_volume:/usr/src/heater_control_app/staticfiles
+      - web_static_volume:/usr/src/heater_control_app/staticfiles
       - media_volume:/usr/mediafiles
-    env_file: ./environments/prod
+    env_file:
+      - ./environments/prod
     depends_on:
       - db
   db:
     image: postgres:11.5-alpine
     ports:
       - 5430:5432
-    env_file: ./environments/prod.db
+    env_file:
+      - ./environments/prod.db
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
   nginx:
     build: ../services_repos/nginx
     volumes:
-      - static_volume:/usr/src/heater_control_app/staticfiles
+      - web_static_volume:/usr/src/heater_control_app/staticfiles
+      - mqttauth_static_volume:/usr/src/mqttauthorization/staticfiles
       - media_volume:/usr/src/heater_control_app/mediafiles
     ports:
       - 1337:80
     depends_on:
       - web
+      - mqttauthorization
   mqttbroker:
     build: ../services_repos/mosquitto
     ports:
       - 1883:1883
       - 9001:9001
-    env_file: ./environments/prod
+    env_file:
+      - ./environments/prod
     volumes:
-      - mosquitto_data:/etc/mosquitto/data
-      - mosquitto_log:/etc/mosquitto/log
+      - type: volume
+        source: mqttbroker_data
+        target: /data/
     depends_on:
       - db
       - web
@@ -43,15 +49,32 @@ services:
     build: ../services_repos/mqtt_client_observer
     depends_on:
       - mqttbroker
-    env_file: ./environments/prod
+    env_file:
+      - ./environments/prod
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
-    env_file: ./environments/prod
+    expose:
+      - 8888
+    env_file:
+      - ./environments/prod
     depends_on:
       - mqttbroker
+  mqttauthorization:
+    build:
+      context: ../services_repos/mqttauthorization
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./environments/prod
+    ports:
+      - 8001:8001
+    depends_on:
+      - db
+    volumes:
+      - mqttauth_static_volume:/usr/src/mqttauthorization/staticfiles
 volumes:
+  mqttauth_static_volume:
+  mqttbroker_data:
+  mqttbroker_log:
   postgres_data_prod:
-  static_volume:
+  web_static_volume:
   media_volume:
-  mosquitto_data:
-  mosquitto_log:

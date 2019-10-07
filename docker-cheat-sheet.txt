@@ -34,6 +34,7 @@ docker-compose exec web python manage.py migrate --noinput
 docker-compose exec web python manage.py migrate --fake mqttauthorization zero
 docker build services/heater_control_app --file services/heater_control_app/Dockerfile --tag heater_control:dev_stable
 
+docker-compose exec mqttauthorization python manage.py migrate --fake authorizationapi zero
 
 # Production
 

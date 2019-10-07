@@ -8,7 +8,8 @@ services:
     volumes:
       - ../services_repos/heater_control_app/:/usr/src/heater_control_app/
       - ../mediafiles:/usr/mediafiles
-    env_file: ./environments/dev
+    env_file:
+      - ./environments/dev
     ports:
       - 8000:8000
     depends_on:
@@ -17,7 +18,8 @@ services:
     image: postgres:11.5-alpine
     ports:
       - 5430:5432
-    env_file: ./environments/dev.db
+    env_file:
+      - ./environments/dev.db
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data/
   mqttbroker:
@@ -25,7 +27,8 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-    env_file: ./environments/dev
+    env_file:
+      - ./environments/dev
     volumes:
       - ../services_repos/mosquitto/config/:/etc/mosquitto/config
       - ../services_repos/mosquitto/data/:/etc/mosquitto/data
@@ -37,15 +40,29 @@ services:
     build: ../services_repos/mqtt_client_observer
     volumes:
       - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
-    env_file: ./environments/dev
+    env_file:
+      - ./environments/dev
     depends_on:
       - mqttbroker
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
     ports:
       - 8888:8888
-    env_file: ./environments/dev
+    env_file:
+      - ./environments/dev
     depends_on:
       - mqttbroker
+  mqttauthorization:
+    build:
+      context: ../services_repos/mqttauthorization
+      dockerfile: Dockerfile
+    env_file:
+      - ./environments/dev
+    volumes:
+      - ../services_repos/mqttauthorization/:/usr/src/mqttauthorization/
+    ports:
+      - 8001:8001
+    depends_on:
+      - db
 volumes:
   postgres_data_dev:
