@@ -1,12 +1,12 @@
 version: '3.7'
 
 services:
-  web:
+  apps_open_api:
     build:
-      context: ../services_repos/heater_control_app
+      context: ../services_repos/apps_open_api
       dockerfile: Dockerfile.prod
     volumes:
-      - web_static_volume:/usr/src/heater_control_app/staticfiles
+      - apps_open_api_static_volume:/usr/src/apps_open_api/staticfiles
       - media_volume:/mediafiles
     env_file:
       - ./environments/prod/appsapi
@@ -24,13 +24,13 @@ services:
   nginx:
     build: ../services_repos/nginx
     volumes:
-      - web_static_volume:/usr/services/heater_control_app/staticfiles
+      - apps_open_api_static_volume:/usr/services/apps_open_api/staticfiles
       - mqttauth_static_volume:/usr/services/mqttauthorization/staticfiles
-      - media_volume:/usr/services/heater_control_app/mediafiles
+      - media_volume:/usr/services/apps_open_api/mediafiles
     ports:
       - 1337:80
     depends_on:
-      - web
+      - apps_open_api
       - mqttauthorization
       - mqtthttpapi
   mqttbroker:
@@ -46,7 +46,7 @@ services:
         target: /data/
     depends_on:
       - db
-      - web
+      - apps_open_api
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     depends_on:
@@ -79,5 +79,5 @@ volumes:
   mqttbroker_data:
   mqttbroker_log:
   postgres_data_prod:
-  web_static_volume:
+  apps_open_api_static_volume:
   media_volume:

@@ -1,12 +1,12 @@
 version: '3.7'
 
 services:
-  web:
+  apps_open_api:
     build:
-      context: ../services_repos/heater_control_app
+      context: ../services_repos/apps_open_api
       dockerfile: Dockerfile
     volumes:
-      - ../services_repos/heater_control_app/:/usr/src/heater_control_app/
+      - ../services_repos/apps_open_api/:/usr/src/apps_open_api/
       - ../mediafiles:/mediafiles
     env_file:
       - ./environments/dev/appsapi
@@ -36,7 +36,7 @@ services:
       - ../services_repos/mosquitto/log/:/etc/mosquitto/log
     depends_on:
       - db
-      - web
+      - apps_open_api
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     volumes:
