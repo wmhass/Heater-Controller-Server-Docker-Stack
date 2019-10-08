@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../services_repos/heater_control_app/:/usr/src/heater_control_app/
-      - ../mediafiles:/usr/mediafiles
+      - ../mediafiles:/mediafiles
     env_file:
       - ./environments/dev/appsapi
       - ./environments/dev/dbinfo

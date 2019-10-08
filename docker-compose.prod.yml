@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.prod
     volumes:
       - web_static_volume:/usr/src/heater_control_app/staticfiles
-      - media_volume:/usr/mediafiles
+      - media_volume:/mediafiles
     env_file:
       - ./environments/prod/appsapi
       - ./environments/prod/dbinfo
@@ -24,9 +24,9 @@ services:
   nginx:
     build: ../services_repos/nginx
     volumes:
-      - web_static_volume:/usr/src/heater_control_app/staticfiles
-      - mqttauth_static_volume:/usr/src/mqttauthorization/staticfiles
-      - media_volume:/usr/src/heater_control_app/mediafiles
+      - web_static_volume:/usr/services/heater_control_app/staticfiles
+      - mqttauth_static_volume:/usr/services/mqttauthorization/staticfiles
+      - media_volume:/usr/services/heater_control_app/mediafiles
     ports:
       - 1337:80
     depends_on:
