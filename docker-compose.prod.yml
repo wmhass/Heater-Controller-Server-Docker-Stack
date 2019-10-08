@@ -47,7 +47,7 @@ services:
     depends_on:
       - db
       - apps_open_api
-  mqttclientobserver:
+  mqtt_client_observer:
     build: ../services_repos/mqtt_client_observer
     depends_on:
       - mqtt_broker
