@@ -9,7 +9,7 @@ services:
       - ../services_repos/apps_open_api/:/usr/src/apps_open_api/
       - ../mediafiles:/mediafiles
     env_file:
-      - ./environments/dev/appsapi
+      - ./environments/dev/apps_open_api
       - ./environments/dev/dbinfo
     ports:
       - 8000:8000
@@ -23,17 +23,17 @@ services:
       - ./environments/dev/postgres
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data/
-  mqttbroker:
-    build: ../services_repos/mosquitto
+  mqtt_broker:
+    build: ../services_repos/mqtt_broker
     ports:
       - 1883:1883
       - 9001:9001
     env_file:
       - ./environments/dev/dbinfo
     volumes:
-      - ../services_repos/mosquitto/config/:/etc/mosquitto/config
-      - ../services_repos/mosquitto/data/:/etc/mosquitto/data
-      - ../services_repos/mosquitto/log/:/etc/mosquitto/log
+      - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
+      - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
+      - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
     depends_on:
       - db
       - apps_open_api
@@ -42,17 +42,17 @@ services:
     volumes:
       - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
     env_file:
-      - ./environments/dev/mqttbrokerinfo
+      - ./environments/dev/mqtt_broker_info
     depends_on:
-      - mqttbroker
+      - mqtt_broker
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
     ports:
       - 8888:8888
     env_file:
-      - ./environments/dev/mqttbrokerinfo
+      - ./environments/dev/mqtt_broker_info
     depends_on:
-      - mqttbroker
+      - mqtt_broker
   mqttauthorization:
     build:
       context: ../services_repos/mqttauthorization

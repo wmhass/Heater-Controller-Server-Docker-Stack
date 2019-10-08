@@ -9,7 +9,7 @@ services:
       - apps_open_api_static_volume:/usr/src/apps_open_api/staticfiles
       - media_volume:/mediafiles
     env_file:
-      - ./environments/prod/appsapi
+      - ./environments/prod/apps_open_api
       - ./environments/prod/dbinfo
     depends_on:
       - db
@@ -33,8 +33,8 @@ services:
       - apps_open_api
       - mqttauthorization
       - mqtthttpapi
-  mqttbroker:
-    build: ../services_repos/mosquitto
+  mqtt_broker:
+    build: ../services_repos/mqtt_broker
     ports:
       - 1883:1883
       - 9001:9001
@@ -42,7 +42,7 @@ services:
       - ./environments/prod/dbinfo
     volumes:
       - type: volume
-        source: mqttbroker_data
+        source: mqtt_broker_data
         target: /data/
     depends_on:
       - db
@@ -50,17 +50,17 @@ services:
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     depends_on:
-      - mqttbroker
+      - mqtt_broker
     env_file:
-      - ./environments/prod/mqttbrokerinfo
+      - ./environments/prod/mqtt_broker_info
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
     expose:
       - 8888
     env_file:
-      - ./environments/prod/mqttbrokerinfo
+      - ./environments/prod/mqtt_broker_info
     depends_on:
-      - mqttbroker
+      - mqtt_broker
   mqttauthorization:
     build:
       context: ../services_repos/mqttauthorization
@@ -76,8 +76,7 @@ services:
       - mqttauth_static_volume:/usr/src/mqttauthorization/staticfiles
 volumes:
   mqttauth_static_volume:
-  mqttbroker_data:
-  mqttbroker_log:
+  mqtt_broker_data:
   postgres_data_prod:
   apps_open_api_static_volume:
   media_volume:
