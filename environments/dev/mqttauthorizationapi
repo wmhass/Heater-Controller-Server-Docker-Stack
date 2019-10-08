@@ -1,0 +1,4 @@
+DEBUG=1
+SECRET_KEY=c%#*&tt66ua^kd)fwil%3j=gu3as6d1dd5ratz2-ce=4-y9y$t
+SQL_ENGINE=django.db.backends.postgresql
+MQTTAUTHORIZATIONAPI_MEDIA_FILES_PATH=/usr/mediafiles/

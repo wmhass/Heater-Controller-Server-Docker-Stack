@@ -9,7 +9,8 @@ services:
       - web_static_volume:/usr/src/heater_control_app/staticfiles
       - media_volume:/usr/mediafiles
     env_file:
-      - ./environments/prod
+      - ./environments/prod/appsapi
+      - ./environments/prod/dbinfo
     depends_on:
       - db
   db:
@@ -17,7 +18,7 @@ services:
     ports:
       - 5430:5432
     env_file:
-      - ./environments/prod.db
+      - ./environments/prod/postgres
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
   nginx:
@@ -31,13 +32,14 @@ services:
     depends_on:
       - web
       - mqttauthorization
+      - mqtthttpapi
   mqttbroker:
     build: ../services_repos/mosquitto
     ports:
       - 1883:1883
       - 9001:9001
     env_file:
-      - ./environments/prod
+      - ./environments/prod/dbinfo
     volumes:
       - type: volume
         source: mqttbroker_data
@@ -50,13 +52,13 @@ services:
     depends_on:
       - mqttbroker
     env_file:
-      - ./environments/prod
+      - ./environments/prod/mqttbrokerinfo
   mqtthttpapi:
     build: ../services_repos/mqtt_http_api
     expose:
       - 8888
     env_file:
-      - ./environments/prod
+      - ./environments/prod/mqttbrokerinfo
     depends_on:
       - mqttbroker
   mqttauthorization:
@@ -64,7 +66,8 @@ services:
       context: ../services_repos/mqttauthorization
       dockerfile: Dockerfile.prod
     env_file:
-      - ./environments/prod
+      - ./environments/prod/mqttauthorizationapi
+      - ./environments/prod/dbinfo
     ports:
       - 8001:8001
     depends_on:

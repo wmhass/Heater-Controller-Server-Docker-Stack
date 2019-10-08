@@ -1,0 +1,5 @@
+SQL_DATABASE=heater_control_prod
+SQL_USER=postgres
+SQL_PASSWORD=h4y1!6:l25#d_W
+SQL_HOST=db
+SQL_PORT=5432
