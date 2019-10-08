@@ -25,14 +25,14 @@ services:
     build: ../services_repos/nginx
     volumes:
       - apps_open_api_static_volume:/usr/services/apps_open_api/staticfiles
-      - mqttauth_static_volume:/usr/services/mqttauthorization/staticfiles
+      - mqttauth_static_volume:/usr/services/mqtt_access_control_api/staticfiles
       - media_volume:/usr/services/apps_open_api/mediafiles
     ports:
       - 1337:80
     depends_on:
       - apps_open_api
-      - mqttauthorization
-      - mqtthttpapi
+      - mqtt_access_control_api
+      - mqtt_http_api
   mqtt_broker:
     build: ../services_repos/mqtt_broker
     ports:
@@ -53,7 +53,7 @@ services:
       - mqtt_broker
     env_file:
       - ./environments/prod/mqtt_broker_info
-  mqtthttpapi:
+  mqtt_http_api:
     build: ../services_repos/mqtt_http_api
     expose:
       - 8888
@@ -61,19 +61,19 @@ services:
       - ./environments/prod/mqtt_broker_info
     depends_on:
       - mqtt_broker
-  mqttauthorization:
+  mqtt_access_control_api:
     build:
-      context: ../services_repos/mqttauthorization
+      context: ../services_repos/mqtt_access_control_api
       dockerfile: Dockerfile.prod
     env_file:
-      - ./environments/prod/mqttauthorizationapi
+      - ./environments/prod/mqtt_access_control_api_info
       - ./environments/prod/db_info
     ports:
       - 8001:8001
     depends_on:
       - db
     volumes:
-      - mqttauth_static_volume:/usr/src/mqttauthorization/staticfiles
+      - mqttauth_static_volume:/usr/src/mqtt_access_control_api/staticfiles
 volumes:
   mqttauth_static_volume:
   mqtt_broker_data:

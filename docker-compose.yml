@@ -45,7 +45,7 @@ services:
       - ./environments/dev/mqtt_broker_info
     depends_on:
       - mqtt_broker
-  mqtthttpapi:
+  mqtt_http_api:
     build: ../services_repos/mqtt_http_api
     ports:
       - 8888:8888
@@ -53,15 +53,15 @@ services:
       - ./environments/dev/mqtt_broker_info
     depends_on:
       - mqtt_broker
-  mqttauthorization:
+  mqtt_access_control_api:
     build:
-      context: ../services_repos/mqttauthorization
+      context: ../services_repos/mqtt_access_control_api
       dockerfile: Dockerfile
     env_file:
-      - ./environments/dev/mqttauthorizationapi
+      - ./environments/dev/mqtt_access_control_api_info
       - ./environments/dev/db_info
     volumes:
-      - ../services_repos/mqttauthorization/:/usr/src/mqttauthorization/
+      - ../services_repos/mqtt_access_control_api/:/usr/src/mqtt_access_control_api/
     ports:
       - 8001:8001
     depends_on:

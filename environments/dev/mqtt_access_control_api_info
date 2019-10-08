@@ -1,4 +1,4 @@
-DEBUG=0
+DEBUG=1
 SECRET_KEY=c%#*&tt66ua^kd)fwil%3j=gu3as6d1dd5ratz2-ce=4-y9y$t
 SQL_ENGINE=django.db.backends.postgresql
-MQTTAUTHORIZATIONAPI_STATICFILES_URLPATH=/mqttauthorization_staticfiles/
+MQTT_ACCESS_CONTROL_STATIC_FILES_URL_PATH=/mqtt_access_control_static_files/
