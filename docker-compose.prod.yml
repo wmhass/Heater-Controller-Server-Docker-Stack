@@ -10,7 +10,7 @@ services:
       - media_volume:/mediafiles
     env_file:
       - ./environments/prod/apps_open_api
-      - ./environments/prod/dbinfo
+      - ./environments/prod/db_info
     depends_on:
       - db
   db:
@@ -39,7 +39,7 @@ services:
       - 1883:1883
       - 9001:9001
     env_file:
-      - ./environments/prod/dbinfo
+      - ./environments/prod/db_info
     volumes:
       - type: volume
         source: mqtt_broker_data
@@ -67,7 +67,7 @@ services:
       dockerfile: Dockerfile.prod
     env_file:
       - ./environments/prod/mqttauthorizationapi
-      - ./environments/prod/dbinfo
+      - ./environments/prod/db_info
     ports:
       - 8001:8001
     depends_on:

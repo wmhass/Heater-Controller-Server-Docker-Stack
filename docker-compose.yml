@@ -10,7 +10,7 @@ services:
       - ../mediafiles:/mediafiles
     env_file:
       - ./environments/dev/apps_open_api
-      - ./environments/dev/dbinfo
+      - ./environments/dev/db_info
     ports:
       - 8000:8000
     depends_on:
@@ -29,7 +29,7 @@ services:
       - 1883:1883
       - 9001:9001
     env_file:
-      - ./environments/dev/dbinfo
+      - ./environments/dev/db_info
     volumes:
       - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
       - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
@@ -59,7 +59,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ./environments/dev/mqttauthorizationapi
-      - ./environments/dev/dbinfo
+      - ./environments/dev/db_info
     volumes:
       - ../services_repos/mqttauthorization/:/usr/src/mqttauthorization/
     ports:
