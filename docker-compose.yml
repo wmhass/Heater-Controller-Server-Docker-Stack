@@ -20,7 +20,7 @@ services:
     ports:
       - 5430:5432
     env_file:
-      - ./environments/dev/postgres
+      - ./environments/dev/postgres_info
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data/
   mqtt_broker:
