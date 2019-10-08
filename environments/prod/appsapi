@@ -1,4 +1,6 @@
 DEBUG=0
 SECRET_KEY=wqx1e!)_pj=n&j1%((otz!ks79t2dt+bichvhzx)e0jgl-jvhf
 SQL_ENGINE=django.db.backends.postgresql
+APPSAPI_STATICFILES_URLPATH=/appsapi_staticfiles/
 APPSAPI_MEDIAFILES_URLPATH=/mediafiles/
+APPSAPI_MEDIAFILES_DIRECTORY=/mediafiles/
