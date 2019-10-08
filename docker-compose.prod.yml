@@ -38,15 +38,10 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-    env_file:
-      - ./environments/prod/db_info
     volumes:
       - type: volume
         source: mqtt_broker_data
         target: /data/
-    depends_on:
-      - db
-      - apps_open_api
   mqtt_client_observer:
     build: ../services_repos/mqtt_client_observer
     depends_on:

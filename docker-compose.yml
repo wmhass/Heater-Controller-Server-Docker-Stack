@@ -28,15 +28,10 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-    env_file:
-      - ./environments/dev/db_info
     volumes:
       - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
       - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
       - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
-    depends_on:
-      - db
-      - apps_open_api
   mqttclientobserver:
     build: ../services_repos/mqtt_client_observer
     volumes:
