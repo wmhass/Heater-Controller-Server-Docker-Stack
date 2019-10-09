@@ -32,7 +32,7 @@ services:
       - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
       - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
       - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
-  mqttclientobserver:
+  mqtt_client_observer:
     build: ../services_repos/mqtt_client_observer
     volumes:
       - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
