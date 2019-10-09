@@ -21,6 +21,7 @@ services:
       - ./environments/prod/postgres_info
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
+      - ./sql_init/:/docker-entrypoint-initdb.d/
   nginx:
     build: ../services_repos/nginx
     volumes:
