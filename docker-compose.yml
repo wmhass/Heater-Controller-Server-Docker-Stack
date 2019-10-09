@@ -32,6 +32,8 @@ services:
       - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
       - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
       - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
+    depends_on:
+      - mqtt_access_control_api
   mqtt_client_observer:
     build: ../services_repos/mqtt_client_observer
     volumes:
