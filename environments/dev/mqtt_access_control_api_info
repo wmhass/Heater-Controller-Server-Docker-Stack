@@ -2,3 +2,8 @@ DEBUG=1
 SECRET_KEY=c%#*&tt66ua^kd)fwil%3j=gu3as6d1dd5ratz2-ce=4-y9y$t
 SQL_ENGINE=django.db.backends.postgresql
 MQTT_ACCESS_CONTROL_STATIC_FILES_URL_PATH=/mqtt_access_control_static_files/
+SQL_DATABASE=mqtt_access_control
+SQL_USER=postgres
+SQL_PASSWORD=postgres
+SQL_HOST=db
+SQL_PORT=5432
