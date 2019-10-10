@@ -1,0 +1,3 @@
+MQTT_USERNAME=mqtt_observer
+MQTT_PASSWORD=admin
+MQTT_CLIENT_ID_PREFIX=mqtt_observer_1234JASHDKJH

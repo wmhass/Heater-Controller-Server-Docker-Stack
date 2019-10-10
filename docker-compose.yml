@@ -34,12 +34,15 @@ services:
       - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
     depends_on:
       - mqtt_access_control_api
+    env_file:
+      - ./environments/dev/mqtt_broker_environment
   mqtt_client_observer:
     build: ../services_repos/mqtt_client_observer
     volumes:
       - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
     env_file:
       - ./environments/dev/mqtt_broker_info
+      - ./environments/dev/mqtt_observer_info
     depends_on:
       - mqtt_broker
   mqtt_http_api:
@@ -48,6 +51,7 @@ services:
       - 8888:8888
     env_file:
       - ./environments/dev/mqtt_broker_info
+      - ./environments/dev/mqtt_http_api_info
     depends_on:
       - mqtt_broker
   mqtt_access_control_api:
