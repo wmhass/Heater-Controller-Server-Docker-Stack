@@ -54,7 +54,7 @@ services:
   mqtt_http_api:
     image: mqtt_http_api_service:stable
     expose:
-      - 8888
+      - 8002
     env_file:
       - ./environments/prod/mqtt_broker_info
       - ./environments/prod/mqtt_http_api_info
