@@ -48,7 +48,7 @@ services:
   mqtt_http_api:
     build: ./services_repos/mqtt_http_api
     ports:
-      - 8888:8888
+      - 8002:8002
     env_file:
       - ./environments/dev/mqtt_broker_info
       - ./environments/dev/mqtt_http_api_info
