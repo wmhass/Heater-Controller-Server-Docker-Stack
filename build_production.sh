@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ../services_repos
+cd ./services_repos
 
 cd mqtt_access_control_api
 git checkout master

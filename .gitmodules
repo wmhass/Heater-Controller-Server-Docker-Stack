@@ -1,0 +1,18 @@
+[submodule "shared_folder/services_repos/mqtt_client_observer"]
+	path = shared_folder/services_repos/mqtt_client_observer
+	url = ./shared_folder/services_repos/mqtt_client_observer
+[submodule "shared_folder/services_repos/mqtt_http_api"]
+	path = shared_folder/services_repos/mqtt_http_api
+	url = ./shared_folder/services_repos/mqtt_http_api
+[submodule "shared_folder/services_repos/nginx"]
+	path = shared_folder/services_repos/nginx
+	url = ./shared_folder/services_repos/nginx
+[submodule "shared_folder/services_repos/apps_open_api"]
+	path = shared_folder/services_repos/apps_open_api
+	url = ./shared_folder/services_repos/apps_open_api
+[submodule "shared_folder/services_repos/mqtt_broker"]
+	path = shared_folder/services_repos/mqtt_broker
+	url = ./shared_folder/services_repos/mqtt_broker
+[submodule "shared_folder/services_repos/mqtt_access_control_api"]
+	path = shared_folder/services_repos/mqtt_access_control_api
+	url = ./shared_folder/services_repos/mqtt_access_control_api

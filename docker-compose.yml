@@ -3,10 +3,10 @@ version: '3.7'
 services:
   apps_open_api:
     build:
-      context: ../services_repos/apps_open_api
+      context: ./services_repos/apps_open_api
       dockerfile: Dockerfile
     volumes:
-      - ../services_repos/apps_open_api/:/usr/src/apps_open_api/
+      - ./services_repos/apps_open_api/:/usr/src/apps_open_api/
       - ../mediafiles:/mediafiles
     env_file:
       - ./environments/dev/apps_open_api
@@ -24,29 +24,29 @@ services:
       - postgres_data_dev:/var/lib/postgresql/data/
       - ./sql_init/:/docker-entrypoint-initdb.d/
   mqtt_broker:
-    build: ../services_repos/mqtt_broker
+    build: ./services_repos/mqtt_broker
     ports:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ../services_repos/mqtt_broker/config/:/etc/mosquitto/config
-      - ../services_repos/mqtt_broker/data/:/etc/mosquitto/data
-      - ../services_repos/mqtt_broker/log/:/etc/mosquitto/log
+      - ./services_repos/mqtt_broker/config/:/etc/mosquitto/config
+      - ./services_repos/mqtt_broker/data/:/etc/mosquitto/data
+      - ./services_repos/mqtt_broker/log/:/etc/mosquitto/log
     depends_on:
       - mqtt_access_control_api
     env_file:
       - ./environments/dev/mqtt_broker_environment
   mqtt_client_observer:
-    build: ../services_repos/mqtt_client_observer
+    build: ./services_repos/mqtt_client_observer
     volumes:
-      - ../services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
+      - ./services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
     env_file:
       - ./environments/dev/mqtt_broker_info
       - ./environments/dev/mqtt_observer_info
     depends_on:
       - mqtt_broker
   mqtt_http_api:
-    build: ../services_repos/mqtt_http_api
+    build: ./services_repos/mqtt_http_api
     ports:
       - 8888:8888
     env_file:
@@ -56,12 +56,12 @@ services:
       - mqtt_broker
   mqtt_access_control_api:
     build:
-      context: ../services_repos/mqtt_access_control_api
+      context: ./services_repos/mqtt_access_control_api
       dockerfile: Dockerfile
     env_file:
       - ./environments/dev/mqtt_access_control_api_info
     volumes:
-      - ../services_repos/mqtt_access_control_api/:/usr/src/mqtt_access_control_api/
+      - ./services_repos/mqtt_access_control_api/:/usr/src/mqtt_access_control_api/
     ports:
       - 8001:8001
     depends_on:

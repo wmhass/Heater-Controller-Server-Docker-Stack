@@ -56,3 +56,26 @@ docker-compose exec mqttbroker kill -SIGHUP 1
 # Build
 docker build -t mqtt_access_control_api:latest
 docker build . -f Dockerfile.prod -t mqtt_access_control_api:stable
+build ../services_repos/apps_open_api -f ../services_repos/apps_open_api/
+Dockerfile.prod -t apps_open_api:stable
+
+
+
+# Links
+## apps_open_api service
+http://127.0.0.1:8000/
+http://127.0.0.1:8000/admin
+
+## mqtt_access_control_api service
+http://127.0.0.1:8001/mqtt_access_control_api/
+http://127.0.0.1:8001/mqtt_access_control_api/admin
+http://127.0.0.1:8001/mqtt_access_control_api/accounts/
+http://127.0.0.1:8001/mqtt_access_control_api/accounts/1
+
+## mqtt_http_api service
+http://127.0.0.1:8888/mqtt_http_api/
+Expect answer in: hello/debug1
+
+## mqtt_observer service
+Publish to: say/hello
+Expect answer in: hello/debug1
