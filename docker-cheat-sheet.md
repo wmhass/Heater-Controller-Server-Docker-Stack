@@ -36,56 +36,51 @@ docker stack deploy -c docker-compose.yml stacktest
 - docker build services/heater_control_app --file services/heater_control_app/Dockerfile.prod --tag heater_control:master_stable
 
 # Exec command
-docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
-docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+- docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+- docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
 
-
-# MQTT Broker
-docker-compose exec mqttbroker kill -SIGHUP 1
-  -> This command will have the mosquitto mqtt broker to reload the configuration file
 
 # Build
-docker build -t mqtt_access_control_api:latest
-docker build . -f Dockerfile.prod -t mqtt_access_control_api:stable
-build ../services_repos/apps_open_api -f ../services_repos/apps_open_api/
-Dockerfile.prod -t apps_open_api:stable
-
+- docker build -t mqtt_access_control_api:latest
+- docker build . -f Dockerfile.prod -t mqtt_access_control_api:stable
+- build ../services_repos/apps_open_api -f ../services_repos/apps_open_api/
+- Dockerfile.prod -t apps_open_api:stable
 
 
 # Links Dev
 ## apps_open_api service
-http://127.0.0.1:8000/
-http://127.0.0.1:8000/admin
+- http://127.0.0.1:8000/
+- http://127.0.0.1:8000/admin
 
 ## mqtt_access_control_api service
-http://127.0.0.1:8001/mqtt_access_control_api/
-http://127.0.0.1:8001/mqtt_access_control_api/admin
-http://127.0.0.1:8001/mqtt_access_control_api/accounts/
-http://127.0.0.1:8001/mqtt_access_control_api/accounts/1
+- http://127.0.0.1:8001/mqtt_access_control_api/
+- http://127.0.0.1:8001/mqtt_access_control_api/admin
+- http://127.0.0.1:8001/mqtt_access_control_api/accounts/
+- http://127.0.0.1:8001/mqtt_access_control_api/accounts/1
 
 ## mqtt_http_api service
-http://127.0.0.1:8888/mqtt_http_api/
-Expect answer in: hello/debug1
+- http://127.0.0.1:8888/mqtt_http_api/
+- Expect answer in: hello/debug1
 
 ## mqtt_observer service
-Publish to: say/hello
-Expect answer in: hello/debug1
+- Publish to: say/hello
+- Expect answer in: hello/debug1
 
 # Links Prod
 ## apps_open_api service
-http://127.0.0.1:1337/
-http://127.0.0.1:1337/admin
+- http://127.0.0.1:1337/
+- http://127.0.0.1:1337/admin
 
 ## mqtt_access_control_api service [This api is not exposed to outside of the docker network]
-http://127.0.0.1:1337/mqtt_access_control_api/
-http://127.0.0.1:1337/mqtt_access_control_api/admin
-http://127.0.0.1:1337/mqtt_access_control_api/accounts/
-http://127.0.0.1:1337/mqtt_access_control_api/accounts/1
+- http://127.0.0.1:1337/mqtt_access_control_api/
+- http://127.0.0.1:1337/mqtt_access_control_api/admin
+- http://127.0.0.1:1337/mqtt_access_control_api/accounts/
+- http://127.0.0.1:1337/mqtt_access_control_api/accounts/1
 
 ## mqtt_http_api service
-http://127.0.0.1:1337/mqtt_http_api/
-Expect answer in: hello/debug1
+- http://127.0.0.1:1337/mqtt_http_api/
+- Expect answer in: hello/debug1
 
 ## mqtt_observer service
-Publish to: say/hello
-Expect answer in: hello/debug1
+- Publish to: say/hello
+- Expect answer in: hello/debug1
