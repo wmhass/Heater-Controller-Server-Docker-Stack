@@ -52,3 +52,7 @@ docker-compose -f docker-compose.prod.yml exec web python manage.py collectstati
 # MQTT Broker
 docker-compose exec mqttbroker kill -SIGHUP 1
   -> This command will have the mosquitto mqtt broker to reload the configuration file
+
+# Build
+docker build -t mqtt_access_control_api:latest
+docker build . -f Dockerfile.prod -t mqtt_access_control_api:stable
