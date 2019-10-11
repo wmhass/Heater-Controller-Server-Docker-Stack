@@ -64,5 +64,3 @@ for service_repo in ${services_repos[@]}; do
   git pull origin master
   docker build . -f $dockerfilename -t $service_repo"_service":stable
 done
-
-exit
