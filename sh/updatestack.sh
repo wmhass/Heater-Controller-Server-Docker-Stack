@@ -6,17 +6,29 @@ while [ -h "$FILE_SOURCE" ]; do # resolve $FILE_SOURCE until the file is no long
   [[ $FILE_SOURCE != /* ]] && FILE_SOURCE="$DIR/$FILE_SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 
-# Check for parameters
-PARAMETERS="$@"
-if [[ " ${PARAMETERS[@]} " =~ " --all " ]]; then
-  PARAMETERS=( --apps_open_api --mqtt_access_control_api --mqtt_broker --mqtt_client_observer --mqtt_http_api --nginx)
+BUILD="0"
+PULL="0"
+
+# Check for Arguments
+ARGUMENTS=( $@ )
+if [[ " ${ARGUMENTS[@]} " =~ "--build" ]]; then
+  BUILD="1"
+fi
+if [[ " ${ARGUMENTS[@]} " =~ "--pull" ]]; then
+  PULL="1"
 fi
 
-# Iterate over parameters and build services repos array
+# Check for Services
+SERVICES=( $@ )
+if [[ " ${SERVICES[@]} " =~ "--all" ]]; then
+  SERVICES=( --apps_open_api --mqtt_access_control_api --mqtt_broker --mqtt_client_observer --mqtt_http_api --nginx)
+fi
+
+# Iterate over services and build services repos array
 declare -a services_repos
-for parameter in "${PARAMETERS[@]}"
+for service in "${SERVICES[@]}"
 do
-    case $parameter in
+    case $service in
         --apps_open_api)
         services_repos+=( "apps_open_api" )
         ;;
@@ -57,10 +69,19 @@ for service_repo in ${services_repos[@]}; do
   if [ -f "$SERVICE_DIR/Dockerfile.prod" ]; then
     dockerfilename="Dockerfile.prod"
   fi
-
-  echo "<--- Building " $service_repo
+  echo ""
+  echo "<-- Service $service_repo"
   cd $SERVICE_DIR
-  git checkout master
-  git pull origin master
-  docker build . -f $dockerfilename -t $service_repo"_service":stable
+
+  if [[ $PULL == "1" ]]; then
+    echo "<<------ Pulling "$service_repo
+    git checkout master
+    git pull origin master
+  fi
+
+  if [[ $BUILD == "1" ]]; then
+    echo "<<------ Building "$service_repo
+    docker build . -f $dockerfilename -t $service_repo"_service":stable
+  fi
+  echo ""
 done
