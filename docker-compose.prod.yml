@@ -26,7 +26,7 @@ services:
       - mqttauth_static_volume:/usr/services/mqtt_access_control_api/staticfiles
       - media_volume:/usr/services/apps_open_api/mediafiles
     ports:
-      - 1337:80
+      - 80:80
     depends_on:
       - apps_open_api
       - mqtt_access_control_api
