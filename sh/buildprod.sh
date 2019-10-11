@@ -62,7 +62,7 @@ for service_repo in ${services_repos[@]}; do
   cd $SERVICE_DIR
   git checkout master
   git pull origin master
-  docker build . -f $dockerfilename -t $service_repo:stable
+  docker build . -f $dockerfilename -t $service_repo"_service":stable
 done
 
 exit
