@@ -9,6 +9,7 @@ done
 BUILD="0"
 PULL="0"
 BUILD_TAG="stable"
+GIT_BRANCH="master"
 # Check for Arguments
 ARGUMENTS=( $@ )
 if [[ " ${ARGUMENTS[@]} " =~ "--build" ]]; then
@@ -21,10 +22,18 @@ fi
 # Check for Tag argument
 for argument in "${ARGUMENTS[@]}"
 do
+  # Build tag
   if [[ $argument =~ --tag=(.*) ]]; then
     tag_result=`echo $argument | sed -e "s/.*\-\-tag\=//g"`
     if [[ ${#tag_result} -gt 0 ]]; then
        BUILD_TAG=$tag_result
+     fi
+  fi
+  # Git Branch
+  if [[ $argument =~ --branch=(.*) ]]; then
+    branch_result=`echo $argument | sed -e "s/.*\-\-branch\=//g"`
+    if [[ ${#branch_result} -gt 0 ]]; then
+       GIT_BRANCH=$branch_result
      fi
   fi
 done
@@ -87,8 +96,8 @@ for service_repo in ${services_repos[@]}; do
 
   if [[ $PULL == "1" ]]; then
     echo "<<------ Pulling "$service_repo
-    git checkout master
-    git pull origin master
+    git checkout $GIT_BRANCH
+    git pull origin $GIT_BRANCH
   fi
 
   if [[ $BUILD == "1" ]]; then
