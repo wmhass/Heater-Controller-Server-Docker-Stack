@@ -8,7 +8,7 @@ done
 
 BUILD="0"
 PULL="0"
-
+BUILD_TAG="stable"
 # Check for Arguments
 ARGUMENTS=( $@ )
 if [[ " ${ARGUMENTS[@]} " =~ "--build" ]]; then
@@ -17,6 +17,15 @@ fi
 if [[ " ${ARGUMENTS[@]} " =~ "--pull" ]]; then
   PULL="1"
 fi
+
+# Check for Tag argument
+for argument in "${ARGUMENTS[@]}"
+do
+  if [[ $argument =~ --tag=(.*)[1,+] ]]; then
+    BUILD_TAG=`echo $argument | sed -e "s/\-\-tag\=//g"`
+    break
+  fi
+done
 
 # Check for Services
 SERVICES=( $@ )
@@ -62,6 +71,7 @@ done
 SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
 SERVICES_REPOS_DIR=$SCRIPT_DIR/../services_repos
 
+# Iterate over services
 for service_repo in ${services_repos[@]}; do
   #Declare vars
   SERVICE_DIR=$SERVICES_REPOS_DIR/$service_repo
@@ -81,7 +91,7 @@ for service_repo in ${services_repos[@]}; do
 
   if [[ $BUILD == "1" ]]; then
     echo "<<------ Building "$service_repo
-    docker build . -f $dockerfilename -t $service_repo"_service":stable
+    docker build . -f $dockerfilename -t $service_repo"_service":$BUILD_TAG
   fi
   echo ""
 done
