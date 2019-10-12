@@ -16,36 +16,49 @@ SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
 # docker pull my-registry:9000/mqtt_http_api_service:stable
 
 cd $SCRIPT_DIR/../
-# Check for parameters
-PARAMETERS="$@"
+
+# Check for ARGUMENTS
+ARGUMENTS="$@"
+
+# Check for --override argument
+OVERRIDE_DOCKER_COMPOSE_FILE=""
+for argument in "${ARGUMENTS[@]}"
+do
+  if [[ $argument =~ --override=(.*) ]]; then
+    override_result=`echo $argument | sed -e "s/.*\-\-override\=//g"`
+    if [[ ${#override_result} -gt 0 ]]; then
+      OVERRIDE_DOCKER_COMPOSE_FILE=" -f $override_result "
+     fi
+  fi
+done
 
 # Development
-if [[ " ${PARAMETERS[@]} " =~ " --dev " ]]; then
+if [[ " ${ARGUMENTS[@]} " =~ " --dev " ]]; then
 
   # Start Development
-  if [[ " ${PARAMETERS[@]} " =~ " --start " ]]; then
-    docker-compose -f docker-compose.yml up -d
-    docker-compose -f docker-compose.yml ps
+  if [[ " ${ARGUMENTS[@]} " =~ " --start " ]]; then
+    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE up -d
+    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
   # Stop Development
-  elif [[ " ${PARAMETERS[@]} " =~ " --stop " ]]; then
-    docker-compose -f docker-compose.yml down
-    docker-compose -f docker-compose.yml ps
+  elif [[ " ${ARGUMENTS[@]} " =~ " --stop " ]]; then
+    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE down
+    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
   # No action
   else
     echo "Nothing to execute. Please run with --start or --stop"
   fi
 
 # Production
-elif [[ " ${PARAMETERS[@]} " =~ " --prod " ]]; then
+elif [[ " ${ARGUMENTS[@]} " =~ " --prod " ]]; then
 
   # Start Production
-  if [[ " ${PARAMETERS[@]} " =~ " --start " ]]; then
-    docker-compose -f docker-compose.prod.yml up -d
-    docker-compose -f docker-compose.prod.yml ps
+  if [[ " ${ARGUMENTS[@]} " =~ " --start " ]]; then
+    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE up -d
+    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
   # Stop Production
-  elif [[ " ${PARAMETERS[@]} " =~ " --stop " ]]; then
-    docker-compose -f docker-compose.prod.yml down
-    docker-compose -f docker-compose.prod.yml ps
+  elif [[ " ${ARGUMENTS[@]} " =~ " --stop " ]]; then
+    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE down
+    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
   # No action
   else
     echo "Nothing to execute. Please run with --start or --stop"
