@@ -21,9 +21,12 @@ fi
 # Check for Tag argument
 for argument in "${ARGUMENTS[@]}"
 do
-  if [[ $argument =~ --tag=(.*)[1,+] ]]; then
-    BUILD_TAG=`echo $argument | sed -e "s/\-\-tag\=//g"`
-    break
+  echo $argument
+  if [[ $argument =~ --tag=(.*) ]]; then
+    tag_result=`echo $argument | sed -e "s/\-\-tag\=//g"`
+    if [[ ${#tag_result} -gt 0 ]]; then
+       BUILD_TAG=$tag_result
+     fi
   fi
 done
 
