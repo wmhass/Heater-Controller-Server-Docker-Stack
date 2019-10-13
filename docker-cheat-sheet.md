@@ -84,3 +84,10 @@ docker stack deploy -c docker-compose.yml stacktest
 ## mqtt_observer service
 - Publish to: say/hello
 - Expect answer in: hello/debug1
+
+# Vagrant
+Create a new box: `vagrant package --output mynew.box`
+
+Add box to box list: `vagrant box add mynewbox mynew.box`
+
+Init vagrant with an image of a box at a specific URL: `vagrant init my-company-box https://boxes.company.com/my-company.box`
