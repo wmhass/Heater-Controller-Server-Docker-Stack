@@ -37,6 +37,7 @@ done
 # Development
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
     cd $ENVIRONMENT_DEV_DIR
+    echo "!!!!!! - ENV:: $ENVIRONMENT_DEV_DIR"
     # Start
     if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
       $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
