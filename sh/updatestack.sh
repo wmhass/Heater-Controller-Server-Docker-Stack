@@ -118,7 +118,6 @@ for service_repo in ${services_repos[@]}; do
     dockerfilename="Dockerfile.prod"
   fi
   echo "<-- Service $service_repo"
-  cd $SERVICE_DIR
 
   if [[ $FLAG_PULL_DOCKER_IMAGE == "1" ]]; then
     echo "<<------ Pulling Docker Image for "$service_repo
@@ -128,12 +127,14 @@ for service_repo in ${services_repos[@]}; do
 
   if [[ $FLAG_PULL_GITHUB_REPO == "1" ]]; then
     echo "<<------ Pulling Github Repository for "$service_repo
+    cd $SERVICE_DIR
     git checkout $GIT_BRANCH
     git pull origin $GIT_BRANCH
   fi
 
   if [[ $FLAG_BUILD == "1" ]]; then
     echo "<<------ Building "$service_repo
+    cd $SERVICE_DIR
     docker build . -f $dockerfilename -t $service_repo"_service":$DOCKER_IMAGE_BUILD_TAG
   fi
   echo ""
