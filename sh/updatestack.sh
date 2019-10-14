@@ -8,7 +8,8 @@ done
 
 # Declare directories
 SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
-SERVICES_REPOS_DIR=$SCRIPT_DIR/../services_repos
+ENVIRONMENT_DEV_DIR=$SCRIPT_DIR/../environments/dev
+SERVICES_REPOS_DIR=$ENVIRONMENT_DEV_DIR/services_repos
 
 # Declare arguments
 ARGUMENT_PULL_GITHUB_REPO="--pull-github-repo"

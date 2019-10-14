@@ -1,18 +1,18 @@
 [submodule "services_repos/apps_open_api"]
-	path = services_repos/apps_open_api
+	path = environments/dev/services_repos/apps_open_api
 	url = git@github.com:wmhass/Heater-Controller-apps_open_api.git
 [submodule "services_repos/mqtt_access_control_api"]
-	path = services_repos/mqtt_access_control_api
+	path = environments/dev/services_repos/mqtt_access_control_api
 	url = git@github.com:wmhass/Heater-Controller-mqtt_access_control_api.git
 [submodule "services_repos/mqtt_broker"]
-	path = services_repos/mqtt_broker
+	path = environments/dev/services_repos/mqtt_broker
 	url = git@github.com:wmhass/Heater-Controller-mqtt_broker.git
 [submodule "services_repos/mqtt_client_observer"]
-	path = services_repos/mqtt_client_observer
+	path = environments/dev/services_repos/mqtt_client_observer
 	url = git@github.com:wmhass/Heater-Controller-mqtt_client_observer.git
 [submodule "services_repos/mqtt_http_api"]
-	path = services_repos/mqtt_http_api
+	path = environments/dev/services_repos/mqtt_http_api
 	url = git@github.com:wmhass/Heater-Controller-mqtt_http_api.git
 [submodule "services_repos/nginx"]
-	path = services_repos/nginx
+	path = environments/dev/services_repos/nginx
 	url = git@github.com:wmhass/Heater-Controller-nginx.git

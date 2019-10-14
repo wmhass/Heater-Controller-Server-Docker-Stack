@@ -8,7 +8,8 @@ done
 
 # Declare Directories
 SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
-cd $SCRIPT_DIR/../
+ENVIRONMENT_DEV_DIR=$SCRIPT_DIR/../environments/dev
+ENVIRONMENT_PROD_DIR=$SCRIPT_DIR/../environments/prod
 
 # Declare arguments
 ARGUMENT_DEV="--dev"
@@ -35,6 +36,7 @@ done
 
 # Development
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
+    cd $ENVIRONMENT_DEV_DIR
     # Start
     if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
       $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
@@ -50,6 +52,7 @@ if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
 
 # Production
 elif [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PROD ]]; then
+    cd $ENVIRONMENT_PROD_DIR
     # Start
     if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
       $DOCKER_COMPOSE_PROD_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
