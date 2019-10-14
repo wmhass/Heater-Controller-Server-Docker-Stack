@@ -6,17 +6,48 @@ while [ -h "$FILE_SOURCE" ]; do # resolve $FILE_SOURCE until the file is no long
   [[ $FILE_SOURCE != /* ]] && FILE_SOURCE="$DIR/$FILE_SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 
-BUILD="0"
-PULL="0"
-BUILD_TAG="stable"
+# Declare directories
+SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
+SERVICES_REPOS_DIR=$SCRIPT_DIR/../services_repos
+
+# Declare arguments
+ARGUMENT_PULL_GITHUB_REPO="--pull-github-repo"
+ARGUMENT_BUILD_DOCKER_IMAGES="--build-docker-images"
+ARGUMENT_PULL_DOCKER_IMAGES="--pull-docker-image"
+ARGUMENT_SERVICE_APPS_OPEN_API="--apps_open_api"
+ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API="--mqtt_access_control_api"
+ARGUMENT_SERVICE_MQTT_BROKER="--mqtt_broker"
+ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER="--mqtt_client_observer"
+ARGUMENT_SERVICE_MQTT_HTTP_API="--mqtt_http_api"
+ARGUMENT_SERVICE_NGINX="--nginx"
+
+# Declare service names
+SERVICE_NAME_APPS_OPEN_API="apps_open_api"
+SERVICE_NAME_MQTT_ACCESS_CONTROL_API="mqtt_access_control_api"
+SERVICE_NAME_MQTT_BROKER="mqtt_broker"
+SERVICE_NAME_MQTT_CLIENT_OBSERVER="mqtt_client_observer"
+SERVICE_NAME_MQTT_HTTP_API="mqtt_http_api"
+SERVICE_NAME_NGINX="nginx"
+
+# Declare variables
+DOCKER_IMAGE_BUILD_TAG="stable"
 GIT_BRANCH="master"
+
+# Declare flags
+FLAG_BUILD="0"
+FLAG_PULL_GITHUB_REPO="0"
+FLAG_PULL_DOCKER_IMAGE="0"
+
 # Check for Arguments
 ARGUMENTS=( $@ )
-if [[ " ${ARGUMENTS[@]} " =~ "--build" ]]; then
-  BUILD="1"
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_BUILD_DOCKER_IMAGES ]]; then
+  FLAG_BUILD="1"
 fi
-if [[ " ${ARGUMENTS[@]} " =~ "--pull" ]]; then
-  PULL="1"
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_GITHUB_REPO ]]; then
+  FLAG_PULL_GITHUB_REPO="1"
+fi
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_DOCKER_IMAGES ]]; then
+  FLAG_PULL_DOCKER_IMAGE="1"
 fi
 
 # Check for Tag argument
@@ -26,7 +57,7 @@ do
   if [[ $argument =~ --tag=(.*) ]]; then
     tag_result=`echo $argument | sed -e "s/.*\-\-tag\=//g"`
     if [[ ${#tag_result} -gt 0 ]]; then
-       BUILD_TAG=$tag_result
+       DOCKER_IMAGE_BUILD_TAG=$tag_result
      fi
   fi
   # Git Branch
@@ -41,7 +72,7 @@ done
 # Check for Services
 SERVICES=( $@ )
 if [[ " ${SERVICES[@]} " =~ "--all" ]]; then
-  SERVICES=( --apps_open_api --mqtt_access_control_api --mqtt_broker --mqtt_client_observer --mqtt_http_api --nginx)
+  SERVICES=( $ARGUMENT_SERVICE_APPS_OPEN_API $ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API $ARGUMENT_SERVICE_MQTT_BROKER $ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER $ARGUMENT_SERVICE_MQTT_HTTP_API $ARGUMENT_SERVICE_NGINX)
 fi
 
 # Iterate over services and build services repos array
@@ -49,38 +80,34 @@ declare -a services_repos
 for service in "${SERVICES[@]}"
 do
     case $service in
-        --apps_open_api)
-        services_repos+=( "apps_open_api" )
+        $ARGUMENT_SERVICE_APPS_OPEN_API)
+        services_repos+=( $SERVICE_NAME_APPS_OPEN_API )
         ;;
 
-        --mqtt_access_control_api)
-        services_repos+=( "mqtt_access_control_api" )
+        $ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API)
+        services_repos+=( $SERVICE_NAME_MQTT_ACCESS_CONTROL_API )
         ;;
 
-        --mqtt_broker)
-        services_repos+=( "mqtt_broker" )
+        $ARGUMENT_SERVICE_MQTT_BROKER)
+        services_repos+=( $SERVICE_NAME_MQTT_BROKER )
         ;;
 
-        --mqtt_client_observer)
-        services_repos+=( "mqtt_client_observer" )
+        $ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER)
+        services_repos+=( $SERVICE_NAME_MQTT_CLIENT_OBSERVER )
         ;;
 
-        --mqtt_http_api)
-        services_repos+=( "mqtt_http_api" )
+        $ARGUMENT_SERVICE_MQTT_HTTP_API)
+        services_repos+=( $SERVICE_NAME_MQTT_HTTP_API )
         ;;
 
-        --nginx)
-        services_repos+=( "nginx" )
+        $ARGUMENT_SERVICE_NGINX)
+        services_repos+=( $SERVICE_NAME_NGINX )
         ;;
 
         *)
         ;;
     esac
 done
-
-# Declare variabls
-SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
-SERVICES_REPOS_DIR=$SCRIPT_DIR/../services_repos
 
 # Iterate over services
 for service_repo in ${services_repos[@]}; do
@@ -90,19 +117,24 @@ for service_repo in ${services_repos[@]}; do
   if [ -f "$SERVICE_DIR/Dockerfile.prod" ]; then
     dockerfilename="Dockerfile.prod"
   fi
-  echo ""
   echo "<-- Service $service_repo"
   cd $SERVICE_DIR
 
-  if [[ $PULL == "1" ]]; then
-    echo "<<------ Pulling "$service_repo
+  if [[ $FLAG_PULL_DOCKER_IMAGE == "1" ]]; then
+    echo "<<------ Pulling Docker Image for "$service_repo
+    # TODO: docker pull image...
+    # docker pull my-registry:9000/mqtt_http_api_service:stable
+  fi
+
+  if [[ $FLAG_PULL_GITHUB_REPO == "1" ]]; then
+    echo "<<------ Pulling Github Repository for "$service_repo
     git checkout $GIT_BRANCH
     git pull origin $GIT_BRANCH
   fi
 
-  if [[ $BUILD == "1" ]]; then
+  if [[ $FLAG_BUILD == "1" ]]; then
     echo "<<------ Building "$service_repo
-    docker build . -f $dockerfilename -t $service_repo"_service":$BUILD_TAG
+    docker build . -f $dockerfilename -t $service_repo"_service":$DOCKER_IMAGE_BUILD_TAG
   fi
   echo ""
 done
