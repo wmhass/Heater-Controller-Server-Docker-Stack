@@ -27,6 +27,7 @@ docker stack deploy -c docker-compose.yml stacktest
 - docker-compose exec web python manage.py migrate --fake mqttauthorization zero
 - docker build services/heater_control_app --file services/heater_control_app/Dockerfile --tag heater_control:dev_stable
 - docker-compose exec mqttauthorization python manage.py migrate --fake authorizationapi zero
+- docker-compose exec -u root jenkins sudo service docker start
 
 # Production
 - docker-compose -f docker-compose.prod.yml up -d --build
@@ -89,5 +90,7 @@ docker stack deploy -c docker-compose.yml stacktest
 Create a new box: `vagrant package --output mynew.box`
 
 Add box to box list: `vagrant box add mynewbox mynew.box`
+
+Publish box: `vagrant cloud publish williamhass/amazon-linux-docker-git 1.0 virtualbox amazon-linux-docker-git.box -d "An amazon linux running docker and git"`
 
 Init vagrant with an image of a box at a specific URL: `vagrant init my-company-box https://boxes.company.com/my-company.box`
