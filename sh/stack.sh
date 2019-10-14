@@ -6,11 +6,19 @@ while [ -h "$FILE_SOURCE" ]; do # resolve $FILE_SOURCE until the file is no long
   [[ $FILE_SOURCE != /* ]] && FILE_SOURCE="$DIR/$FILE_SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 
+# Declare Directories
 SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
-
 cd $SCRIPT_DIR/../
 
-# Check for ARGUMENTS
+# Declare arguments
+ARGUMENT_DEV="--dev"
+ARGUMENT_PROD="--prod"
+ARGUMENT_START="--start"
+ARGUMENT_STOP="--stop"
+
+# Declare variables
+DOCKER_COMPOSE_DEV_COMMAND="docker-compose -f docker-compose.yml"
+DOCKER_COMPOSE_PROD_COMMAND="docker-compose -f docker-compose.prod.yml"
 ARGUMENTS="$@"
 
 # Check for --override argument
@@ -26,37 +34,34 @@ do
 done
 
 # Development
-if [[ " ${ARGUMENTS[@]} " =~ " --dev " ]]; then
-
-  # Start Development
-  if [[ " ${ARGUMENTS[@]} " =~ " --start " ]]; then
-    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE up -d
-    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
-  # Stop Development
-  elif [[ " ${ARGUMENTS[@]} " =~ " --stop " ]]; then
-    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE down
-    docker-compose -f docker-compose.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
-  # No action
-  else
-    echo "Nothing to execute. Please run with --start or --stop"
-  fi
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
+    # Start
+    if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
+      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
+      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE ps
+    # Stop
+    elif [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_STOP ]]; then
+      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE down
+      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE ps
+    # No action
+    else
+      echo "Nothing to execute. Please run with $ARGUMENT_START or $ARGUMENT_STOP"
+    fi
 
 # Production
-elif [[ " ${ARGUMENTS[@]} " =~ " --prod " ]]; then
-
-  # Start Production
-  if [[ " ${ARGUMENTS[@]} " =~ " --start " ]]; then
-    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE up -d
-    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
-  # Stop Production
-  elif [[ " ${ARGUMENTS[@]} " =~ " --stop " ]]; then
-    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE down
-    docker-compose -f docker-compose.prod.yml $OVERRIDE_DOCKER_COMPOSE_FILE ps
-  # No action
-  else
-    echo "Nothing to execute. Please run with --start or --stop"
-  fi
-
+elif [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PROD ]]; then
+    # Start
+    if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
+      $DOCKER_COMPOSE_PROD_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
+      $DOCKER_COMPOSE_PROD_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE ps
+    # Stop
+    elif [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_STOP ]]; then
+      $DOCKER_COMPOSE_PROD_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE down
+      $DOCKER_COMPOSE_PROD_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE ps
+    # No action
+    else
+      echo "Nothing to execute. Please run with $ARGUMENT_START or $ARGUMENT_STOP"
+    fi
 else
-  echo "Nothing to execute. Please run with --dev or --prod"
+  echo "Nothing to execute. Please run with $ARGUMENT_DEV or $ARGUMENT_PROD"
 fi
