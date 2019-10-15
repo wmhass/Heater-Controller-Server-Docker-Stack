@@ -40,7 +40,7 @@ if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
     echo "!!!!!! - ENV:: $ENVIRONMENT_DEV_DIR"
     # Start
     if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_START ]]; then
-      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d
+      $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE up -d --build
       $DOCKER_COMPOSE_DEV_COMMAND $OVERRIDE_DOCKER_COMPOSE_FILE ps
     # Stop
     elif [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_STOP ]]; then
