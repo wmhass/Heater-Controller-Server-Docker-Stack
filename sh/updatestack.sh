@@ -21,6 +21,7 @@ ARGUMENT_SERVICE_MQTT_BROKER="--mqtt_broker"
 ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER="--mqtt_client_observer"
 ARGUMENT_SERVICE_MQTT_HTTP_API="--mqtt_http_api"
 ARGUMENT_SERVICE_NGINX="--nginx"
+ARGUMENT_DEV="--dev"
 
 # Declare service names
 SERVICE_NAME_APPS_OPEN_API="apps_open_api"
@@ -38,6 +39,7 @@ GIT_BRANCH="master"
 FLAG_BUILD="0"
 FLAG_PULL_GITHUB_REPO="0"
 FLAG_PULL_DOCKER_IMAGE="0"
+FLAG_IS_DEV="0"
 
 # Check for Arguments
 ARGUMENTS=( $@ )
@@ -49,6 +51,9 @@ if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_GITHUB_REPO ]]; then
 fi
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_DOCKER_IMAGES ]]; then
   FLAG_PULL_DOCKER_IMAGE="1"
+fi
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
+  FLAG_IS_DEV="1"
 fi
 
 # Check for Tag argument
@@ -115,7 +120,7 @@ for service_repo in ${services_repos[@]}; do
   #Declare vars
   SERVICE_DIR=$SERVICES_REPOS_DIR/$service_repo
   dockerfilename="Dockerfile"
-  if [ -f "$SERVICE_DIR/Dockerfile.prod" ]; then
+  if [ -f "$SERVICE_DIR/Dockerfile.prod" ] && [ $FLAG_IS_DEV == "0" ]; then
     dockerfilename="Dockerfile.prod"
   fi
   echo "<-- Service $service_repo"
