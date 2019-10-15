@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  apps_open_api:
+    image: apps_open_api_service:dev
+  mqtt_broker:
+    image: mqtt_broker_service:dev
+  mqtt_client_observer:
+    image: mqtt_client_observer_service:dev
+  mqtt_http_api:
+    image: mqtt_http_api_service:dev
+  mqtt_access_control_api:
+    image: mqtt_access_control_api_service:dev
