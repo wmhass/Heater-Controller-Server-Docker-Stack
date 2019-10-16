@@ -14,6 +14,7 @@ SERVICES_REPOS_DIR=$ENVIRONMENT_DEV_DIR/services_repos
 # Declare arguments
 ARGUMENT_PULL_GITHUB_REPO="--pull-github-repo"
 ARGUMENT_BUILD_DOCKER_IMAGES="--build-docker-images"
+ARGUMENT_PUSH_DOCKER_IMAGES="--push-docker-images"
 ARGUMENT_PULL_DOCKER_IMAGES="--pull-docker-image"
 ARGUMENT_SERVICE_APPS_OPEN_API="--apps_open_api"
 ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API="--mqtt_access_control_api"
@@ -39,6 +40,7 @@ GIT_BRANCH="master"
 FLAG_BUILD="0"
 FLAG_PULL_GITHUB_REPO="0"
 FLAG_PULL_DOCKER_IMAGE="0"
+FLAG_PUSH_DOCKER_IMAGE="0"
 FLAG_IS_DEV="0"
 
 # Check for Arguments
@@ -51,6 +53,9 @@ if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_GITHUB_REPO ]]; then
 fi
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PULL_DOCKER_IMAGES ]]; then
   FLAG_PULL_DOCKER_IMAGE="1"
+fi
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PUSH_DOCKER_IMAGES ]]; then
+  FLAG_PUSH_DOCKER_IMAGE="1"
 fi
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
   FLAG_IS_DEV="1"
@@ -142,6 +147,10 @@ for service_repo in ${services_repos[@]}; do
     echo "<<------ Building "$service_repo
     cd $SERVICE_DIR
     docker build . -f $dockerfilename -t $service_repo"_service":$DOCKER_IMAGE_BUILD_TAG
+    if [[ $FLAG_PUSH_DOCKER_IMAGE == "1" ]]; then
+      # TODO: Push docker images
+      # docker push ...
+    fi
   fi
   echo ""
 done
