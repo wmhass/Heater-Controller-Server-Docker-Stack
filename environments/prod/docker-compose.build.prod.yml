@@ -1,19 +1,19 @@
 version: '3.7'
-
+# Call CODEPATH=../dev/services_repos; docker-compose -f docker-compose.build.prod.yml build
 services:
   apps_open_api:
     build:
-      context: ../dev/services_repos/apps_open_api
+      context: $CODEPATH/apps_open_api
       dockerfile: Dockerfile.prod
   nginx:
-    build: ../dev/services_repos/nginx
+    build: $CODEPATH/nginx
   mqtt_broker:
-    build: ../dev/services_repos/mqtt_broker
+    build: $CODEPATH/mqtt_broker
   mqtt_client_observer:
-    build: ../dev/services_repos/mqtt_client_observer
+    build: $CODEPATH/mqtt_client_observer
   mqtt_http_api:
-    build: ../dev/services_repos/mqtt_http_api
+    build: $CODEPATH/mqtt_http_api
   mqtt_access_control_api:
     build:
-      context: ../dev/services_repos/mqtt_access_control_api
+      context: $CODEPATH/mqtt_access_control_api
       dockerfile: Dockerfile.prod
