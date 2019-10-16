@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  apps_open_api:
+    build:
+      context: ../dev/services_repos/apps_open_api
+      dockerfile: Dockerfile.prod
+  nginx:
+    build: ../dev/services_repos/nginx
+  mqtt_broker:
+    build: ../dev/services_repos/mqtt_broker
+  mqtt_client_observer:
+    build: ../dev/services_repos/mqtt_client_observer
+  mqtt_http_api:
+    build: ../dev/services_repos/mqtt_http_api
+  mqtt_access_control_api:
+    build:
+      context: ../dev/services_repos/mqtt_access_control_api
+      dockerfile: Dockerfile.prod
