@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   apps_open_api:
+    image: apps_open_api_service:latest
     build:
       context: ./services_repos/apps_open_api
       dockerfile: Dockerfile
@@ -24,6 +25,7 @@ services:
       - postgres_data_dev:/var/lib/postgresql/data/
       - ../../sql_init/:/docker-entrypoint-initdb.d/
   mqtt_broker:
+    image: mqtt_broker_service:latest
     build: ./services_repos/mqtt_broker
     ports:
       - 1883:1883
@@ -37,6 +39,7 @@ services:
     env_file:
       - ./mqtt_broker_environment
   mqtt_client_observer:
+    image: mqtt_client_observer_service:latest
     build: ./services_repos/mqtt_client_observer
     volumes:
       - ./services_repos/mqtt_client_observer:/usr/src/mqtt_client_observer
@@ -46,6 +49,7 @@ services:
     depends_on:
       - mqtt_broker
   mqtt_http_api:
+    image: mqtt_http_api_service:latest
     build: ./services_repos/mqtt_http_api
     ports:
       - 8002:8002
@@ -55,6 +59,7 @@ services:
     depends_on:
       - mqtt_broker
   mqtt_access_control_api:
+    image: mqtt_access_control_api_service:latest
     build:
       context: ./services_repos/mqtt_access_control_api
       dockerfile: Dockerfile
