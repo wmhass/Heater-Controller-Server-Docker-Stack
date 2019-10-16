@@ -128,6 +128,7 @@ for service_repo in ${services_repos[@]}; do
   if [ -f "$SERVICE_DIR/Dockerfile.prod" ] && [ $FLAG_IS_DEV == "0" ]; then
     dockerfilename="Dockerfile.prod"
   fi
+  IMAGE_NAME=$service_repo"_service"
   echo "<-- Service $service_repo"
 
   if [[ $FLAG_PULL_DOCKER_IMAGE == "1" ]]; then
@@ -144,10 +145,11 @@ for service_repo in ${services_repos[@]}; do
   fi
 
   if [[ $FLAG_BUILD == "1" ]]; then
-    echo "<<------ Building "$service_repo
+    echo "<<------ Building docker image "$IMAGE_NAME
     cd $SERVICE_DIR
-    docker build . -f $dockerfilename -t $service_repo"_service":$DOCKER_IMAGE_BUILD_TAG
+    docker build . -f $dockerfilename -t $IMAGE_NAME:$DOCKER_IMAGE_BUILD_TAG
     if [[ $FLAG_PUSH_DOCKER_IMAGE == "1" ]]; then
+      echo "<<------ Pushing docker image "$IMAGE_NAME
       # TODO: Push docker images
       # docker push ...
     fi
