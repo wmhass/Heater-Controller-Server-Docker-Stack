@@ -8,21 +8,24 @@ done
 
 # Declare directories
 SCRIPT_DIR="$( cd -P "$( dirname "$FILE_SOURCE" )" && pwd )"
+ENVIRONMENT_PROD_DIR=$SCRIPT_DIR/../environments/prod
+DOCKER_COMPOSE_FILE_PROD="docker-compose.prod.yml"
+DOCKER_COMPOSE_FILE_BUILD_PROD="docker-compose.build.prod.yml"
 ENVIRONMENT_DEV_DIR=$SCRIPT_DIR/../environments/dev
 SERVICES_REPOS_DIR=$ENVIRONMENT_DEV_DIR/services_repos
 
 # Declare arguments
 ARGUMENT_PULL_GITHUB_REPO="--pull-github-repo"
-ARGUMENT_BUILD_DOCKER_IMAGES="--build-docker-images"
-ARGUMENT_PUSH_DOCKER_IMAGES="--push-docker-images"
-ARGUMENT_PULL_DOCKER_IMAGES="--pull-docker-image"
+ARGUMENT_BUILD_DOCKER_IMAGES="--build"
+ARGUMENT_PUSH_DOCKER_IMAGES="--push-image"
+ARGUMENT_PULL_DOCKER_IMAGES="--pull-image"
 ARGUMENT_SERVICE_APPS_OPEN_API="--apps_open_api"
 ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API="--mqtt_access_control_api"
 ARGUMENT_SERVICE_MQTT_BROKER="--mqtt_broker"
 ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER="--mqtt_client_observer"
 ARGUMENT_SERVICE_MQTT_HTTP_API="--mqtt_http_api"
 ARGUMENT_SERVICE_NGINX="--nginx"
-ARGUMENT_DEV="--dev"
+ARGUMENT_PROD="--prod"
 
 # Declare service names
 SERVICE_NAME_APPS_OPEN_API="apps_open_api"
@@ -33,15 +36,17 @@ SERVICE_NAME_MQTT_HTTP_API="mqtt_http_api"
 SERVICE_NAME_NGINX="nginx"
 
 # Declare variables
-DOCKER_IMAGE_BUILD_TAG="stable"
+DOCKER_IMAGE_TAG_PARAM=""
 GIT_BRANCH="master"
+DEFAULT_DEV_TAG="latest"
+DEFAULT_PROD_TAG="stable"
 
 # Declare flags
 FLAG_BUILD="0"
 FLAG_PULL_GITHUB_REPO="0"
 FLAG_PULL_DOCKER_IMAGE="0"
 FLAG_PUSH_DOCKER_IMAGE="0"
-FLAG_IS_DEV="0"
+FLAG_IS_PROD="0"
 
 # Check for Arguments
 ARGUMENTS=( $@ )
@@ -57,8 +62,8 @@ fi
 if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PUSH_DOCKER_IMAGES ]]; then
   FLAG_PUSH_DOCKER_IMAGE="1"
 fi
-if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_DEV ]]; then
-  FLAG_IS_DEV="1"
+if [[ " ${ARGUMENTS[@]} " =~ $ARGUMENT_PROD ]]; then
+  FLAG_IS_PROD="1"
 fi
 
 # Check for Tag argument
@@ -68,7 +73,7 @@ do
   if [[ $argument =~ --tag=(.*) ]]; then
     tag_result=`echo $argument | sed -e "s/.*\-\-tag\=//g"`
     if [[ ${#tag_result} -gt 0 ]]; then
-       DOCKER_IMAGE_BUILD_TAG=$tag_result
+       DOCKER_IMAGE_TAG_PARAM=$tag_result
      fi
   fi
   # Git Branch
@@ -87,32 +92,32 @@ if [[ " ${SERVICES[@]} " =~ "--all" ]]; then
 fi
 
 # Iterate over services and build services repos array
-declare -a services_repos
+declare -a services_names
 for service in "${SERVICES[@]}"
 do
     case $service in
         $ARGUMENT_SERVICE_APPS_OPEN_API)
-        services_repos+=( $SERVICE_NAME_APPS_OPEN_API )
+        services_names+=( $SERVICE_NAME_APPS_OPEN_API )
         ;;
 
         $ARGUMENT_SERVICE_MQTT_ACCESS_CONTROL_API)
-        services_repos+=( $SERVICE_NAME_MQTT_ACCESS_CONTROL_API )
+        services_names+=( $SERVICE_NAME_MQTT_ACCESS_CONTROL_API )
         ;;
 
         $ARGUMENT_SERVICE_MQTT_BROKER)
-        services_repos+=( $SERVICE_NAME_MQTT_BROKER )
+        services_names+=( $SERVICE_NAME_MQTT_BROKER )
         ;;
 
         $ARGUMENT_SERVICE_MQTT_CLIENT_OBSERVER)
-        services_repos+=( $SERVICE_NAME_MQTT_CLIENT_OBSERVER )
+        services_names+=( $SERVICE_NAME_MQTT_CLIENT_OBSERVER )
         ;;
 
         $ARGUMENT_SERVICE_MQTT_HTTP_API)
-        services_repos+=( $SERVICE_NAME_MQTT_HTTP_API )
+        services_names+=( $SERVICE_NAME_MQTT_HTTP_API )
         ;;
 
         $ARGUMENT_SERVICE_NGINX)
-        services_repos+=( $SERVICE_NAME_NGINX )
+        services_names+=( $SERVICE_NAME_NGINX )
         ;;
 
         *)
@@ -121,37 +126,51 @@ do
 done
 
 # Iterate over services
-for service_repo in ${services_repos[@]}; do
+for service_name in ${services_names[@]}; do
   #Declare vars
-  SERVICE_DIR=$SERVICES_REPOS_DIR/$service_repo
-  dockerfilename="Dockerfile"
-  if [ -f "$SERVICE_DIR/Dockerfile.prod" ] && [ $FLAG_IS_DEV == "0" ]; then
-    dockerfilename="Dockerfile.prod"
-  fi
-  IMAGE_NAME=$service_repo"_service"
-  echo "<-- Service $service_repo"
+  SERVICE_DIR=$SERVICES_REPOS_DIR/$service_name
+  echo "<-- Service $service_name"
 
+  # Pull Docker Image
   if [[ $FLAG_PULL_DOCKER_IMAGE == "1" ]]; then
-    echo "<<------ Pulling Docker Image for "$service_repo
+    echo "<<------ Pulling Docker Image for "$service_name
     # TODO: docker pull image...
     # docker pull my-registry:9000/mqtt_http_api_service:stable
   fi
 
+  # Pull Github CHanges
   if [[ $FLAG_PULL_GITHUB_REPO == "1" ]]; then
-    echo "<<------ Pulling Github Repository for "$service_repo
+    echo "<<------ Pulling Github Repository for "$service_name
     cd $SERVICE_DIR
     git checkout $GIT_BRANCH
     git pull origin $GIT_BRANCH
   fi
 
+  # Build
   if [[ $FLAG_BUILD == "1" ]]; then
-    echo "<<------ Building docker image "$IMAGE_NAME
-    cd $SERVICE_DIR
-    docker build . -f $dockerfilename -t $IMAGE_NAME:$DOCKER_IMAGE_BUILD_TAG
+    echo "<<------ Building docker image "$service_name
+    # Build Production
+    if [ $FLAG_IS_PROD == "0" ]; then
+      cd $ENVIRONMENT_PROD_DIR
+      TAG=$DEFAULT_PROD_TAG
+      if [[ ${#DOCKER_IMAGE_TAG_PARAM} -gt 0 ]]; then
+         TAG=$DOCKER_IMAGE_TAG_PARAM
+      fi
+      CODEPATH=$SERVICES_REPOS_DIR TAG=$TAG docker-compose -f $DOCKER_COMPOSE_FILE_PROD -f $DOCKER_COMPOSE_FILE_BUILD_PROD build $service_name
+    # Build Development
+    else
+      cd $ENVIRONMENT_DEV_DIR
+      TAG=$DEFAULT_DEV_TAG
+      if [[ ${#DOCKER_IMAGE_TAG_PARAM} -gt 0 ]]; then
+         TAG=$DOCKER_IMAGE_TAG_PARAM
+      fi
+      TAG=$TAG docker-compose build $service_name
+    fi
+
+    # Push docker image
     if [[ $FLAG_PUSH_DOCKER_IMAGE == "1" ]]; then
-      echo "<<------ Pushing docker image "$IMAGE_NAME
+      echo "<<------ Pushing docker image "$service_name
       # TODO: Push docker images
-      # docker push ...
     fi
   fi
   echo ""

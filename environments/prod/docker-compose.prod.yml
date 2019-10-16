@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   apps_open_api:
-    image: apps_open_api_service:stable
+    image: apps_open_api_service:$TAG
     volumes:
       - apps_open_api_static_volume:/usr/src/apps_open_api/staticfiles
       - media_volume:/mediafiles
@@ -20,7 +20,7 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data/
       - ../../sql_init/:/docker-entrypoint-initdb.d/
   nginx:
-    image: nginx_service:stable
+    image: nginx_service:$TAG
     volumes:
       - apps_open_api_static_volume:/usr/services/apps_open_api/staticfiles
       - mqttauth_static_volume:/usr/services/mqtt_access_control_api/staticfiles
@@ -32,7 +32,7 @@ services:
       - mqtt_access_control_api
       - mqtt_http_api
   mqtt_broker:
-    image: mqtt_broker_service:stable
+    image: mqtt_broker_service:$TAG
     ports:
       - 1883:1883
       - 9001:9001
@@ -45,14 +45,14 @@ services:
     env_file:
       - ./mqtt_broker_environment
   mqtt_client_observer:
-    image: mqtt_client_observer_service:stable
+    image: mqtt_client_observer_service:$TAG
     depends_on:
       - mqtt_broker
     env_file:
       - ./mqtt_broker_info
       - ./mqtt_observer_info
   mqtt_http_api:
-    image: mqtt_http_api_service:stable
+    image: mqtt_http_api_service:$TAG
     expose:
       - 8002
     env_file:
@@ -61,7 +61,7 @@ services:
     depends_on:
       - mqtt_broker
   mqtt_access_control_api:
-    image: mqtt_access_control_api_service:stable
+    image: mqtt_access_control_api_service:$TAG
     env_file:
       - ./mqtt_access_control_api_info
     ports:
