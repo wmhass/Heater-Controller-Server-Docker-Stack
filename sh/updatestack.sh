@@ -150,7 +150,7 @@ for service_name in ${services_names[@]}; do
   if [[ $FLAG_BUILD == "1" ]]; then
     echo "<<------ Building docker image "$service_name
     # Build Production
-    if [ $FLAG_IS_PROD == "0" ]; then
+    if [ $FLAG_IS_PROD == "1" ]; then
       cd $ENVIRONMENT_PROD_DIR
       TAG=$DEFAULT_PROD_TAG
       if [[ ${#DOCKER_IMAGE_TAG_PARAM} -gt 0 ]]; then
